@@ -21,6 +21,7 @@
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">صفحه ورود</h3></div>
                                     <div class="card-body">
                                         <form method="POST">
+                                            {% include('show_flashed_messages.html') %}
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" name="email_or_username" id="email_or_username" type="text" placeholder="ایمیل یا نام کاربری" />
                                                 <label for="email_or_username">ایمیل یا نام کاربری</label>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for
 from flask_login import LoginManager, login_required, \
                                 login_user, logout_user, current_user
 import config
@@ -50,6 +50,7 @@ def add_have_for_user():
         have_information['remaining_amount'] = request.form['remaining_amount']
 
     functions.insert_have(have_information)
+    flash('داشته شما با موفقیت افزوده شد.', 'success')
     return redirect('/')
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -61,13 +62,16 @@ def login():
         email_or_username = request.form['email_or_username']
         password = request.form['password']
         if not email_or_username or not password:
+            flash('لطفا ایمیل یا نام کاربری یا رمز عبور خود را به درستی وارد کنید', 'danger')
             return redirect(url_for('login'))
         user_information = functions.user_login_settings(email_or_username, password)
         if user_information:
             user = functions.User(user_information[0])
             login_user(user)
+            flash('شما وارد حساب کاربری خود شدید.', 'success')
             return redirect('/')
         else:
+            flash('لطفا مجددا تلاش کنید.', 'danger')
             return redirect('/login')
     else:
         return render_template('login.html')
@@ -80,6 +84,7 @@ def load_user(user_id):
 @login_required
 def logout():
     logout_user()
+    flash('شما از حساب کاربری خود خارج شدید.', 'success')
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
