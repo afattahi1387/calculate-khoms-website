@@ -22,7 +22,35 @@ def home():
     for have in havesRow:
         haveId += 1
         haves[str(haveId)] = have
-    return render_template('index.html', haves = haves)
+
+    if request.args.get('edit-have'):
+        show_form = 'edit_have'
+    else:
+        show_form = 'add_have'
+
+    return render_template('index.html', haves = haves, show_form = show_form, user_id = current_user.get_id())
+
+@app.route('/add-have-for-user', methods = ['POST'])
+@login_required
+def add_have_for_user():
+    if not request.form['name'] or request.form['type'] == 'is_null' or not request.form['total_price']:
+        return redirect('/')
+    
+    if request.form['type'] == 'commodity' and not request.form['remaining_amount']:
+        return redirect('/')
+
+    have_information = {}
+    have_information['name'] = request.form['name']
+    have_information['type'] = request.form['type']
+    have_information['user_id'] = request.form['user_id']
+    have_information['total_price'] = request.form['total_price']
+    if not request.form['remaining_amount']:
+        have_information['remaining_amount'] = None
+    else:
+        have_information['remaining_amount'] = request.form['remaining_amount']
+
+    functions.insert_have(have_information)
+    return redirect('/')
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():

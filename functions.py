@@ -36,6 +36,22 @@ def get_user_haves(user_id):
     cursor.execute(f"SELECT * FROM haves WHERE user_id = '{user_id}' ORDER BY id DESC")
     return cursor.fetchall()
 
+def insert_have(have_information):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    query = f'''
+        INSERT INTO haves VALUES (NULL, '{have_information["name"]}', '{have_information["type"]}', '{have_information["user_id"]}', '{have_information["total_price"]}'
+    '''
+    if not have_information['remaining_amount']:
+        query += ', NULL)'
+    else:
+        query += f", '{have_information['remaining_amount']}')"
+
+    cursor.execute(query)
+    connect_to_db.commit()
+    cursor.close()
+    return True
+
 class User(UserMixin):
     def __init__(self, id):
         self.id = id
