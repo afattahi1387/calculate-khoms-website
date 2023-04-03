@@ -168,7 +168,7 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                داشته ها
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -179,6 +179,7 @@
                                             <th>نوع</th>
                                             <th>قیمت کلی</th>
                                             <th>مقدار باقی مانده</th>
+                                            <th>عملیات</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -200,6 +201,9 @@
                                                     {% else %}
                                                         {{ haves[have][5] }}
                                                     {% endif %}
+                                                </td>
+                                                <td>
+                                                    <button onclick="if(confirm('آیا از حذف این داشته مطمئن هستید؟')){window.location.href = '/delete-have/{{ haves[have][0] }}';}" class="btn btn-danger">حذف</button>
                                                 </td>
                                             </tr>
                                         {% endfor %}

@@ -53,6 +53,13 @@ def add_have_for_user():
     flash('داشته شما با موفقیت افزوده شد.', 'success')
     return redirect('/')
 
+@app.route('/delete-have/<int:have_id>')
+@login_required
+def delete_have_page(have_id):
+    functions.delete_have(have_id)
+    flash('داشته شما با موفقیت حذف شد.', 'success')
+    return redirect('/')
+
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if current_user.is_authenticated:

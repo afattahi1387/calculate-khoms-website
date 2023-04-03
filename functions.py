@@ -52,6 +52,18 @@ def insert_have(have_information):
     cursor.close()
     return True
 
+def delete_have(have_id):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    
+    cursor.execute(f'''
+        DELETE FROM haves WHERE id = '{have_id}'
+    ''')
+
+    connect_to_db.commit()
+    cursor.close()
+    return True
+
 class User(UserMixin):
     def __init__(self, id):
         self.id = id
