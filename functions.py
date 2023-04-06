@@ -36,6 +36,12 @@ def get_user_haves(user_id):
     cursor.execute(f"SELECT * FROM haves WHERE user_id = '{user_id}' ORDER BY id DESC")
     return cursor.fetchall()
 
+def get_one_have(have_id):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    cursor.execute(f"SELECT * FROM haves WHERE id = {have_id}")
+    return cursor.fetchone()
+
 def insert_have(have_information):
     connect_to_db = db_connect()
     cursor = connect_to_db.cursor()
@@ -47,6 +53,27 @@ def insert_have(have_information):
     else:
         query += f", '{have_information['remaining_amount']}')"
 
+    cursor.execute(query)
+    connect_to_db.commit()
+    cursor.close()
+    return True
+
+def update_have(have_id, new_have_row):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    query = f"""
+        UPDATE haves SET name = '{new_have_row['name']}',
+        type = '{new_have_row['type']}',
+        user_id = '{new_have_row['user_id']}',
+        total_price = '{new_have_row['total_price']}'
+    """
+
+    if new_have_row['remaining_amount']:
+        query += f", remaining_amount = '{new_have_row['remaining_amount']}'"
+    else:
+        query += ", remaining_amount = NULL"
+
+    query += f" WHERE id = '{have_id}'"
     cursor.execute(query)
     connect_to_db.commit()
     cursor.close()

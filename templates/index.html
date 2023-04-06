@@ -148,18 +148,37 @@
                             </div>
                             <div class="card-body">
                                 {% if show_form == 'edit_have' %}
-                                    edit_have
+                                    <form action="/update-have/{{ have_row_for_edit[0] }}" method="POST" style="direction: rtl;">
+                                        <input type="text" name="name" class="form-control" placeholder="نام" value="{{ have_row_for_edit[1] }}"><br><br>
+                                        <select name="type" class="form-control">
+                                            {% if have_row_for_edit[2] == 'commodity' %}
+                                                <option value="commodity" selected>کالا</option>
+                                                <option value="money">پول</option>
+                                            {% elif have_row_for_edit[2] == 'money' %}
+                                                <option value="commodity">کالا</option>
+                                                <option value="money" selected>پول</option>
+                                            {% endif %}
+                                        </select><br><br>
+                                        <input type="hidden" name="user_id" value="{{ user_id }}">
+                                        <input type="number" name="total_price" class="form-control" placeholder="قیمت کلی" value="{{ have_row_for_edit[4] }}"><br><br>
+                                        {% if have_row_for_edit[5] %}
+                                            <input type="number" name="remaining_amount" class="form-control" placeholder="مقدار باقی مانده (به کیلو)" value="{{ have_row_for_edit[5] }}"><br><br>
+                                        {% else %}
+                                            <input type="number" name="remaining_amount" class="form-control" placeholder="مقدار باقی مانده (به کیلو)" value="{{ have_row_for_edit[5] }}"><br><br>
+                                        {% endif %}
+                                        <input type="submit" value="ویرایش" class="btn btn-warning" style="color: white;">
+                                    </form>
                                 {% else %}
                                     <form action="/add-have-for-user" method="POST" style="direction: rtl;">
                                         <input type="text" name="name" class="form-control" placeholder="نام"><br><br>
-                                        <select name="type" id="type" class="form-control">
+                                        <select name="type" class="form-control">
                                             <option value="is_null">نوع داشته خود را وارد کنید</option>
                                             <option value="commodity">کالا</option>
                                             <option value="money">پول</option>
                                         </select><br><br>
                                         <input type="hidden" name="user_id" value="{{ user_id }}">
                                         <input type="number" name="total_price" class="form-control" placeholder="قیمت کلی"><br><br>
-                                        <input type="number" name="remaining_amount" class="form-control" placeholder="مقدار باقی مانده (این مقدار فقط باید برای کالا وارد شود.)"><br><br>
+                                        <input type="number" name="remaining_amount" class="form-control" placeholder="مقدار باقی مانده به کیلو (این مقدار فقط باید برای کالا وارد شود.)"><br><br>
                                         <input type="submit" value="ثبت" class="btn btn-success">
                                     </form>
                                 {% endif %}
@@ -203,6 +222,7 @@
                                                     {% endif %}
                                                 </td>
                                                 <td>
+                                                    <a href="/?edit-have={{ haves[have][0] }}" class="btn btn-warning" style="color: white;">ویرایش</a>
                                                     <button onclick="if(confirm('آیا از حذف این داشته مطمئن هستید؟')){window.location.href = '/delete-have/{{ haves[have][0] }}';}" class="btn btn-danger">حذف</button>
                                                 </td>
                                             </tr>

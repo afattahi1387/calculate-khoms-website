@@ -25,10 +25,12 @@ def home():
 
     if request.args.get('edit-have'):
         show_form = 'edit_have'
+        have_row_for_edit = functions.get_one_have(request.args.get('edit-have'))
     else:
         show_form = 'add_have'
+        have_row_for_edit = None
 
-    return render_template('index.html', haves = haves, show_form = show_form, user_id = current_user.get_id())
+    return render_template('index.html', haves = haves, show_form = show_form, user_id = current_user.get_id(), have_row_for_edit = have_row_for_edit)
 
 @app.route('/add-have-for-user', methods = ['POST'])
 @login_required
@@ -51,6 +53,31 @@ def add_have_for_user():
 
     functions.insert_have(have_information)
     flash('داشته شما با موفقیت افزوده شد.', 'success')
+    return redirect('/')
+
+@app.route('/update-have/<int:have_id>', methods = ['POST'])
+@login_required
+def update_have_page(have_id):
+    if not request.form['name'] or not request.form['total_price']:
+        flash('لطفا اطلاعات خود را به صورت کامل وارد کنید.', 'danger')
+        return redirect('/')
+
+    if request.form['type'] == 'commodity' and not request.form['remaining_amount']:
+        flash('لطفا اطلاعات خود را به صورت کامل وارد کنید.', 'danger')
+        return redirect('/')
+
+    new_have_row = {}
+    new_have_row['name'] = request.form['name']
+    new_have_row['type'] = request.form['type']
+    new_have_row['user_id'] = request.form['user_id']
+    new_have_row['total_price'] = request.form['total_price']
+    if new_have_row['type'] == 'commodity' and request.form['remaining_amount']:
+        new_have_row['remaining_amount'] = request.form['remaining_amount']
+    else:
+        new_have_row['remaining_amount'] = None
+
+    functions.update_have(have_id, new_have_row)
+    flash('ویرایش داشته شما با موفقیت انجام شد.', 'success')
     return redirect('/')
 
 @app.route('/delete-have/<int:have_id>')
