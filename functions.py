@@ -36,6 +36,12 @@ def get_user_haves(user_id):
     cursor.execute(f"SELECT * FROM haves WHERE user_id = '{user_id}' ORDER BY id DESC")
     return cursor.fetchall()
 
+def count_user_haves(user_id):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    cursor.execute(f"SELECT * FROM haves WHERE user_id = '{user_id}' ORDER BY id DESC")
+    return cursor.rowcount
+
 def get_one_have(have_id):
     connect_to_db = db_connect()
     cursor = connect_to_db.cursor()
@@ -90,6 +96,36 @@ def delete_have(have_id):
     connect_to_db.commit()
     cursor.close()
     return True
+
+def calculate_have_khoms(have_id):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    cursor.execute(f"SELECT * FROM haves WHERE id = '{have_id}'")
+    have_row = cursor.fetchone()
+    if have_row[2] == 'money':
+        return have_row[4]
+
+    return have_row[4] * have_row[5]
+
+def calculate_khoms_of_user_haves(user_id):
+    all_haves = get_user_haves(user_id)
+    khoms = 0
+    for have in all_haves:
+        khoms += calculate_have_khoms(have[0])
+
+    return khoms
+
+def add_cama_in_number(number):
+    number = str(number)
+    counter = 0
+    new_number_string = ""
+    for i in range(1, len(number) + 1):
+        counter += 1
+        new_number_string = number[-counter] + new_number_string
+        if counter % 3 == 0 and len(number) > counter:
+            new_number_string = ',' + new_number_string
+
+    return new_number_string
 
 class User(UserMixin):
     def __init__(self, id):

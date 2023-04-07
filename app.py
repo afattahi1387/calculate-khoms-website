@@ -21,6 +21,11 @@ def home():
     havesRow = functions.get_user_haves(current_user.get_id())
     for have in havesRow:
         haveId += 1
+        have = list(have)
+        have[4] = functions.add_cama_in_number(have[4])
+        have.append(functions.add_cama_in_number(functions.calculate_have_khoms(have[0])))
+        if have[5]:
+            have[5] = functions.add_cama_in_number(have[5])
         haves[str(haveId)] = have
 
     if request.args.get('edit-have'):
@@ -30,7 +35,7 @@ def home():
         show_form = 'add_have'
         have_row_for_edit = None
 
-    return render_template('index.html', haves = haves, show_form = show_form, user_id = current_user.get_id(), have_row_for_edit = have_row_for_edit)
+    return render_template('index.html', haves = haves, show_form = show_form, user_id = current_user.get_id(), have_row_for_edit = have_row_for_edit, total_khoms = functions.add_cama_in_number(functions.calculate_khoms_of_user_haves(current_user.get_id())), number_of_haves = functions.count_user_haves(current_user.get_id()))
 
 @app.route('/add-have-for-user', methods = ['POST'])
 @login_required

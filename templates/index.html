@@ -14,28 +14,10 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+            <a class="navbar-brand ps-3" href="/">صفحه اصلی</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-                </div>
-            </form>
-            <!-- Navbar-->
-            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4"></ul>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
@@ -101,37 +83,17 @@
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
+                                    <div class="card-body">مجموع خمس تمامی داشته ها</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Warning Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        <a class="small text-white" style="text-decoration: none; direction: rtl;">{{ total_khoms }} تومان</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
+                                    <div class="card-body">تعداد تمامی داشته ها</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        <a class="small text-white" style="text-decoration: none; direction: rtl;">{{ number_of_haves }} تا</a>
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +122,7 @@
                                             {% endif %}
                                         </select><br><br>
                                         <input type="hidden" name="user_id" value="{{ user_id }}">
-                                        <input type="number" name="total_price" class="form-control" placeholder="قیمت کلی" value="{{ have_row_for_edit[4] }}"><br><br>
+                                        <input type="number" name="total_price" class="form-control" placeholder="قیمت کلی (تومان)" value="{{ have_row_for_edit[4] }}"><br><br>
                                         {% if have_row_for_edit[5] %}
                                             <input type="number" name="remaining_amount" class="form-control" placeholder="مقدار باقی مانده (به کیلو)" value="{{ have_row_for_edit[5] }}"><br><br>
                                         {% else %}
@@ -177,7 +139,7 @@
                                             <option value="money">پول</option>
                                         </select><br><br>
                                         <input type="hidden" name="user_id" value="{{ user_id }}">
-                                        <input type="number" name="total_price" class="form-control" placeholder="قیمت کلی"><br><br>
+                                        <input type="number" name="total_price" class="form-control" placeholder="قیمت کلی (تومان)"><br><br>
                                         <input type="number" name="remaining_amount" class="form-control" placeholder="مقدار باقی مانده به کیلو (این مقدار فقط باید برای کالا وارد شود.)"><br><br>
                                         <input type="submit" value="ثبت" class="btn btn-success">
                                     </form>
@@ -197,7 +159,8 @@
                                             <th>نام</th>
                                             <th>نوع</th>
                                             <th>قیمت کلی</th>
-                                            <th>مقدار باقی مانده</th>
+                                            <th>مقدار باقی مانده (کیلو)</th>
+                                            <th>خمس مربوط به این داشته (تومان)</th>
                                             <th>عملیات</th>
                                         </tr>
                                     </thead>
@@ -214,13 +177,14 @@
                                                     {% endif %}
                                                 </td>
                                                 <td>{{ haves[have][4] }}</td>
-                                                <td>
+                                                <td style="direction: rtl;">
                                                     {% if not haves[have][5] %}
                                                         ---
                                                     {% else %}
                                                         {{ haves[have][5] }}
                                                     {% endif %}
                                                 </td>
+                                                <td>{{ haves[have][6] }}</td>
                                                 <td>
                                                     <a href="/?edit-have={{ haves[have][0] }}" class="btn btn-warning" style="color: white;">ویرایش</a>
                                                     <button onclick="if(confirm('آیا از حذف این داشته مطمئن هستید؟')){window.location.href = '/delete-have/{{ haves[have][0] }}';}" class="btn btn-danger">حذف</button>
