@@ -1,5 +1,6 @@
 import MySQLdb
 from flask_login import UserMixin
+from decimal import Decimal
 import config
 
 def db_connect():
@@ -108,9 +109,9 @@ def calculate_have_khoms(have_id):
     cursor.execute(f"SELECT * FROM haves WHERE id = '{have_id}'")
     have_row = cursor.fetchone()
     if have_row[2] == 'money':
-        return have_row[4]
+        return Decimal(have_row[4] / 5)
 
-    return have_row[4] * have_row[5]
+    return Decimal((have_row[4] * have_row[5]) / 5)
 
 def calculate_khoms_of_user_haves(user_id):
     all_haves = get_user_haves(user_id)
