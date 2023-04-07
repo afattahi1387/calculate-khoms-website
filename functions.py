@@ -36,10 +36,15 @@ def get_user_haves(user_id):
     cursor.execute(f"SELECT * FROM haves WHERE user_id = '{user_id}' ORDER BY id DESC")
     return cursor.fetchall()
 
-def count_user_haves(user_id):
+def count_user_haves(user_id, have_type = None):
     connect_to_db = db_connect()
     cursor = connect_to_db.cursor()
-    cursor.execute(f"SELECT * FROM haves WHERE user_id = '{user_id}' ORDER BY id DESC")
+    query = f"SELECT * FROM haves WHERE user_id = '{user_id}'"
+    if have_type:
+        query += f" AND type = '{have_type}'"
+
+    query += " ORDER BY id DESC"
+    cursor.execute(query)
     return cursor.rowcount
 
 def get_one_have(have_id):

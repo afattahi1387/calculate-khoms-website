@@ -35,7 +35,15 @@ def home():
         show_form = 'add_have'
         have_row_for_edit = None
 
-    return render_template('index.html', haves = haves, show_form = show_form, user_id = current_user.get_id(), have_row_for_edit = have_row_for_edit, total_khoms = functions.add_cama_in_number(functions.calculate_khoms_of_user_haves(current_user.get_id())), number_of_haves = functions.count_user_haves(current_user.get_id()))
+    return render_template('index.html',
+    haves = haves,
+    show_form = show_form,
+    user_id = current_user.get_id(),
+    have_row_for_edit = have_row_for_edit,
+    total_khoms = functions.add_cama_in_number(functions.calculate_khoms_of_user_haves(current_user.get_id())),
+    number_of_haves = functions.add_cama_in_number(functions.count_user_haves(current_user.get_id())),
+    number_of_commodities = functions.add_cama_in_number(functions.count_user_haves(current_user.get_id(), 'commodity')),
+    number_of_moneys = functions.add_cama_in_number(functions.count_user_haves(current_user.get_id(), 'money')))
 
 @app.route('/add-have-for-user', methods = ['POST'])
 @login_required
