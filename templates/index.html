@@ -45,9 +45,9 @@
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">مجموع خمس تمامی داشته ها</div>
+                                    <div class="card-body">مجموع قیمت ها</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white" style="text-decoration: none; direction: rtl;">{{ total_khoms }} تومان</a>
+                                        <a class="small text-white" style="text-decoration: none; direction: rtl;">{{ total_prices }} تومان</a>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +75,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                <div class="alert bg-success text-white" style="direction: rtl;">مجموع خمس تمامی داشته ها: <strong>{{ total_khoms }} تومان</strong></div>
+                            </div>
                         </div>
+                        <hr>
                         <div class="card mb-4">
                             <div class="card-header">
                                 {% if show_form == 'edit_have' %}

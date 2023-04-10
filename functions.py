@@ -113,6 +113,17 @@ def calculate_have_khoms(have_id):
 
     return Decimal((have_row[4] * have_row[5]) / 5)
 
+def calculate_total_prices(user_id):
+    user_haves = get_user_haves(user_id)
+    total_prices = 0
+    for have in user_haves:
+        if have[2] == 'commodity':
+            total_prices += (have[4] * have[5])
+        else:
+            total_prices += have[4]
+
+    return total_prices
+
 def calculate_khoms_of_user_haves(user_id):
     all_haves = get_user_haves(user_id)
     khoms = 0

@@ -46,6 +46,7 @@ def home():
     show_form = show_form,
     user_id = current_user.get_id(),
     have_row_for_edit = have_row_for_edit,
+    total_prices = functions.add_cama_in_number(functions.calculate_total_prices(current_user.get_id())),
     total_khoms = functions.add_cama_in_number(functions.calculate_khoms_of_user_haves(current_user.get_id())),
     number_of_haves = functions.add_cama_in_number(functions.count_user_haves(current_user.get_id())),
     number_of_commodities = functions.add_cama_in_number(functions.count_user_haves(current_user.get_id(), 'commodity')),
