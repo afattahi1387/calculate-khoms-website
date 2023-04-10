@@ -136,8 +136,9 @@
                                             <th>ردیف</th>
                                             <th>نام</th>
                                             <th>نوع</th>
-                                            <th>قیمت کلی</th>
+                                            <th>قیمت اصلی</th>
                                             <th>مقدار باقی مانده (کیلو)</th>
+                                            <th>جمع قیمت ها</th>
                                             <th>خمس مربوط به این داشته (تومان)</th>
                                             <th>عملیات</th>
                                         </tr>
@@ -162,6 +163,7 @@
                                                         {{ haves[have][5] }}
                                                     {% endif %}
                                                 </td>
+                                                <td>{{ haves[have][7] }}</td>
                                                 <td>{{ haves[have][6] }}</td>
                                                 <td>
                                                     <a href="/?edit-have={{ haves[have][0] }}" class="btn btn-warning" style="color: white;">ویرایش</a>

@@ -22,8 +22,14 @@ def home():
     for have in havesRow:
         haveId += 1
         have = list(have)
-        have[4] = functions.add_cama_in_number(have[4])
         have.append(functions.add_cama_in_number(functions.calculate_have_khoms(have[0])))
+        if have[2] == 'commodity':
+            have.append(functions.add_cama_in_number(have[4] * have[5]))
+        else:
+            have.append(functions.add_cama_in_number(have[4]))
+
+        have[4] = functions.add_cama_in_number(have[4])
+
         if have[5]:
             have[5] = functions.add_cama_in_number(have[5])
         haves[str(haveId)] = have
