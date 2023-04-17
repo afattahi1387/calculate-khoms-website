@@ -45,6 +45,7 @@ def home():
     haves = haves,
     show_form = show_form,
     user_id = current_user.get_id(),
+    user_name = functions.get_one_user(current_user.get_id())[1],
     have_row_for_edit = have_row_for_edit,
     total_prices = functions.add_cama_in_number(functions.calculate_total_prices(current_user.get_id())),
     total_khoms = functions.add_cama_in_number(functions.calculate_khoms_of_user_haves(current_user.get_id())),
