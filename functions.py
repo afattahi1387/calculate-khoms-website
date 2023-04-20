@@ -31,6 +31,29 @@ def user_login_settings(email_or_username, password):
 
     return False
 
+def user_exists(email, username, password):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    cursor.execute(f'''
+        SELECT * FROM users WHERE email = '{email}' OR username = '{username}' OR password = '{password}'
+    ''')
+
+    if cursor.rowcount != 1:
+        return False
+
+    userRow = cursor.fetchone()
+    repeated_fields = []
+    if email == userRow[2]:
+        repeated_fields.append('ایمیل')
+
+    if username == userRow[3]:
+        repeated_fields.append('نام کاربری')
+
+    if password == userRow[4]:
+        repeated_fields.append('رمز عبور')
+
+    return repeated_fields
+
 def get_user_haves(user_id):
     connect_to_db = db_connect()
     cursor = connect_to_db.cursor()
@@ -53,6 +76,18 @@ def get_one_have(have_id):
     cursor = connect_to_db.cursor()
     cursor.execute(f"SELECT * FROM haves WHERE id = {have_id}")
     return cursor.fetchone()
+
+def user_register(user_info):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    user_info['full_name'] = user_info['first_name'] + ' ' + user_info['last_name']
+    cursor.execute(f'''
+        INSERT INTO users VALUES (NULL, '{user_info["full_name"]}', '{user_info["email"]}', '{user_info["username"]}', '{user_info["password"]}')
+    ''')
+    last_row_id = cursor.lastrowid
+    connect_to_db.commit()
+    cursor.close()
+    return last_row_id
 
 def insert_have(have_information):
     connect_to_db = db_connect()

@@ -131,6 +131,64 @@ def login():
     else:
         return render_template('login.html')
 
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect('/')
+    
+    if request.method == 'POST':
+        required_fields = {
+            'firstname' : 'نام',
+            'lastname' : 'نام خانوادگی',
+            'email' : 'ایمیل',
+            'username' : 'نام کاربری',
+            'password' : 'رمز عبور',
+            'password_confirm' : 'تکرار رمز عبور'
+        }
+        redirect_to_register = False
+        for k, v in required_fields.items():
+            if not request.form[k]:
+                flash('فیلد ' + v + ' شما خالی می باشد. لطفا آن را پر کنید.', 'danger')
+                redirect_to_register = True
+
+        if request.form['password'] != request.form['password_confirm']:
+            flash('رمز عبور و تکرار آن با هم برابر نیستند.', 'danger')
+            redirect_to_register = True
+
+        user_information = functions.user_exists(request.form['email'], request.form['username'], request.form['password'])
+
+        if user_information:
+            flash_message = 'اطلاعات وارد شده تکراری می باشد. لطفا فیلد های '
+            counter = 0
+            for fa in user_information:
+                if counter == 0:
+                    flash_message += fa
+                    counter = 1
+                else:
+                    flash_message += ' - ' + fa
+
+            flash_message += ' را عوض کنید.'
+            flash(flash_message, 'danger')
+            redirect_to_register = True
+
+        if redirect_to_register:
+            return redirect(url_for('register'))
+        
+        last_row_id = functions.user_register({
+            'first_name' : request.form['firstname'],
+            'last_name' : request.form['lastname'],
+            'email' : request.form['email'],
+            'username' : request.form['username'],
+            'password' : request.form['password']
+        })
+
+        user = functions.User(last_row_id)
+        login_user(user)
+        flash('شما ثبت نام شده و وارد حساب کاربری خود شدید.', 'success')
+        return redirect('/')
+    else:
+        return render_template('register.html')
+
 @login_manager.user_loader
 def load_user(user_id):
     return functions.User(user_id)
