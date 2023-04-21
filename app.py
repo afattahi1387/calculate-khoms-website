@@ -122,6 +122,9 @@ def login():
         email_or_username = request.form['email_or_username']
         password = request.form['password']
         if not email_or_username or not password:
+            if email_or_username:
+                session['login_page_email_or_username'] = email_or_username
+            
             flash('لطفا ایمیل یا نام کاربری یا رمز عبور خود را به درستی وارد کنید', 'danger')
             return redirect(url_for('login'))
         user_information = functions.user_login_settings(email_or_username, password)
@@ -134,7 +137,12 @@ def login():
             flash('لطفا مجددا تلاش کنید.', 'danger')
             return redirect('/login')
     else:
-        return render_template('login.html')
+        if 'login_page_email_or_username' in session:
+            email_or_username = session['login_page_email_or_username']
+            session.pop('login_page_email_or_username')
+        else:
+            email_or_username = ''
+        return render_template('login.html', old_email_or_username = email_or_username)
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
