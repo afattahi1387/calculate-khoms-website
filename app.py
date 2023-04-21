@@ -1,4 +1,5 @@
-from flask import Flask, flash, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, \
+                                request, redirect, url_for, session
 from flask_login import LoginManager, login_required, \
                                 login_user, logout_user, current_user
 import config
@@ -16,6 +17,10 @@ users = [functions.User(userRow[0]) for userRow in functions.get_all_users()]
 
 @app.route('/')
 def home():
+    if not current_user.is_authenticated:
+        flash('ابتدا باید وارد شوید.', 'primary')
+        return redirect(url_for('login'))
+
     haves = {}
     haveId = 0
     havesRow = functions.get_user_haves(current_user.get_id())
@@ -172,6 +177,18 @@ def register():
             redirect_to_register = True
 
         if redirect_to_register:
+            if request.form['firstname']:
+                session['register_page_firstname'] = request.form['firstname']
+
+            if request.form['lastname']:
+                session['register_page_lastname'] = request.form['lastname']
+
+            if request.form['email']:
+                session['register_page_email'] = request.form['email']
+
+            if request.form['username']:
+                session['register_page_username'] = request.form['username']
+
             return redirect(url_for('register'))
         
         last_row_id = functions.user_register({
@@ -187,7 +204,13 @@ def register():
         flash('شما ثبت نام شده و وارد حساب کاربری خود شدید.', 'success')
         return redirect('/')
     else:
-        return render_template('register.html')
+        fields_value = {}
+        for ch in ['firstname', 'lastname', 'email', 'username']:
+            if 'register_page_' + ch in session:
+                fields_value[ch] = session['register_page_' + ch]
+                session.pop('register_page_' + ch)
+
+        return render_template('register.html', fields_value = fields_value)
 
 @login_manager.user_loader
 def load_user(user_id):

@@ -25,23 +25,23 @@
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" name="firstname" id="firstname" type="text" placeholder="نام" />
+                                                        <input class="form-control" name="firstname" id="firstname" type="text" placeholder="نام" value="{{ fields_value['firstname'] }}" />
                                                         <label for="firstname">نام</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input class="form-control" name="lastname" id="lastname" type="text" placeholder="نام خانوادگی" />
+                                                        <input class="form-control" name="lastname" id="lastname" type="text" placeholder="نام خانوادگی" value="{{ fields_value['lastname'] }}" />
                                                         <label for="lastname">نام خانوادگی</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" style="text-align: left;" name="email" id="email" type="email" placeholder="ایمیل" />
+                                                <input class="form-control" style="text-align: left;" name="email" id="email" type="email" placeholder="ایمیل" value="{{ fields_value['email'] }}" />
                                                 <label for="email">ایمیل</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" style="text-align: left;" name="username" id="username" type="text" placeholder="نام کاربری" />
+                                                <input class="form-control" style="text-align: left;" name="username" id="username" type="text" placeholder="نام کاربری" value="{{ fields_value['username'] }}" />
                                                 <label for="username">نام کاربری</label>
                                             </div>
                                             <div class="row mb-3">
