@@ -9,3 +9,5 @@ DB_NAME = 'your database name'
 SECRET_KEY = 'your secret key'
 
 MAIL_PORT = your mail port
+
+FORGET_PASSWORD_MAIL_SENDER = 'your email'
