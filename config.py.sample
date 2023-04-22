@@ -1,3 +1,5 @@
+SITE_URL = 'your site url'
+
 HOST = 'your host'
 
 USERNAME = 'your username'
