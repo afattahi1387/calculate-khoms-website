@@ -2,10 +2,23 @@ from flask import Flask, flash, render_template, \
                                 request, redirect, url_for, session
 from flask_login import LoginManager, login_required, \
                                 login_user, logout_user, current_user
+from flask_mail import Mail, Message
 import config
 import functions
 
+import socket
+socket.getaddrinfo('localhost', config.MAIL_PORT)
+
 app = Flask(__name__)
+
+app.config['MAIL_SERVER'] = 'sandbox.smtp.mailtrap.io'
+app.config['MAIL_PORT'] = config.MAIL_PORT
+app.config['MAIL_USERNAME'] = '5db6253802bb7d'
+app.config['MAIL_PASSWORD'] = '586933c026e705'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+mail = Mail(app)
 
 app.config.update(SECRET_KEY = config.SECRET_KEY)
 
@@ -220,6 +233,56 @@ def register():
 
         return render_template('register.html', fields_value = fields_value)
 
+@app.route('/forget-password', methods = ['GET', 'POST'])
+def forget_password_page():
+    if current_user.is_authenticated:
+        return redirect('/')
+    
+    if request.method == 'POST':
+        email = request.form['email']
+        find_user = functions.get_user_with_email(email)
+        if not find_user:
+            flash('کاربری یافت نشد. لطفا مجددا تلاش کنید.', 'danger')
+            return redirect('/forget-password?show-flashed-messages=1')
+        else:
+            change_password_url = functions.get_change_password_url(find_user[0])
+            message_text = f'''با سلام. روی لینک زیر بزنید تا به صفحه تعویض لینک هدایت شوید.
+            <br><br><br>
+            <a href="{change_password_url}" style="text-decoration: none;">{change_password_url}</a>'''
+            msg = Message('لینک عوض کردن رمز عبور', sender = config.FORGET_PASSWORD_MAIL_SENDER, recipients = [email])
+            msg.body = message_text
+            mail.send(msg)
+            flash('ایمیل برای شما با موفقیت ارسال شد. لطفا آن را بخوانید و طبق آن عمل کنید.', 'success')
+            return redirect('/forget-password?show-flashed-messages=1')
+    else:
+        if request.args.get('show-flashed-messages'):
+            show_flashed_messages = True
+        else:
+            show_flashed_messages = False
+        return render_template('forget_password_page.html', show_flashed_messages = show_flashed_messages)
+
+@app.route('/change-password/<user_id>', methods = ['GET', 'POST'])
+def change_password_page(user_id):
+    if current_user.is_authenticated:
+        return redirect('/')
+
+    if request.method == 'POST':
+        if not request.form['password'] and not request.form['password_confirm']:
+            flash('لطفا هر دو کارد زیر را به صورت کامل وارد نمایید.', 'danger')
+            return redirect(f'/change-password/{user_id}')
+        
+        if request.form['password'] != request.form['password_confirm']:
+            flash('لطفا تکرار رمز عبور جدید را دقیقا برابر با رمز عبور جدید وارد کنید.', 'danger')
+            return redirect(f'/change-password/{user_id}')
+
+        functions.change_password(user_id, request.form['password'])
+        user = functions.User(user_id)
+        login_user(user)
+        flash('شما وارد حساب کاربری خود شدید.', 'success')
+        return redirect('/')
+    else:
+        return render_template('change_password_page.html')
+
 @login_manager.user_loader
 def load_user(user_id):
     return functions.User(user_id)
@@ -232,4 +295,5 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
+    print(functions.get_change_password_url(8))
     app.run(debug=True)

@@ -21,6 +21,18 @@ def get_one_user(user_id):
     cursor.execute(f"SELECT * FROM users WHERE id = '{user_id}'")
     return cursor.fetchone()
 
+def get_user_with_email(email):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    cursor.execute(f'''
+        SELECT * FROM users WHERE email = '{email}'
+    ''')
+    
+    if cursor.rowcount == 0:
+        return False
+
+    return cursor.fetchone()
+
 def user_login_settings(email_or_username, password):
     connect_to_db = db_connect()
     cursor = connect_to_db.cursor()
@@ -190,3 +202,16 @@ class User(UserMixin):
 
     def __repr__(self):
         return "%d/%s/%s/%s/%s" % (self.id, self.name, self.email, self.username, self.password)
+
+def get_change_password_url(user_id):
+    return f'{config.SITE_URL}/change-password/{user_id}'
+
+def change_password(user_id, new_password):
+    connect_to_db = db_connect()
+    cursor = connect_to_db.cursor()
+    cursor.execute(f'''
+        UPDATE users SET password = '{new_password}' WHERE id = '{user_id}'
+    ''')
+    connect_to_db.commit()
+    cursor.close()
+    return True
